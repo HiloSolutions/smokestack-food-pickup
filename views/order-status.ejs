@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Users</title>
+
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" />
+    <link rel="stylesheet" href="/vendor/border-box.css" />
+    <link rel="stylesheet" href="/styles/main.css" />
+    <link rel="stylesheet" href="/styles/layout.css" />
+    <link rel="stylesheet" href="/styles/order-status.css"/>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&family=Special+Elite&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/81d8ede405.js" crossorigin="anonymous"></script>
+    <script src="
+    https://cdn.socket.io/4.6.0/socket.io.min.js
+    " integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+
+    <script src="/vendor/jquery-3.0.0.js"></script>
+    <script defer src="/scripts/order-tracking.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+  </head>
+
+  <body>
+    <nav>
+      <span id="logo">MeatHub</span>
+      <a class="home-button" href="/">Return Home</a>
+    </nav>
+    <header class="page-header2">
+      <h2 class="page-title">Order Successful!</h2>
+    </header>
+
+
+    <div class="content-container">
+      <div class="content" id="initial-order">
+        <h3 class="pickup-alert">
+          The restaurant will confirm your estimated pick up time shortly...
+        </h3>
+        <div class="blob">
+          <i class="fa fa-clock-o"></i>
+        </div>
+      </div>
+      <div id="order-estimate" class="hidden content"></div>
+      <div id="order-complete" class="hidden content">
+        <h3 class="pickup-alert">
+          Your order is ready for pick up! <br> Thank you for eating with Foodhub.
+        </h3>
+        <button class="button home-button" id="review">Leave a review of your items</button>
+      </div>
+      <div id="order-review" class="content">
+      </div>
+    </div>
+
+
+  </body>
+</html>
