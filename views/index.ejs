@@ -13,26 +13,37 @@
   <link rel="stylesheet" href="/styles/main.css" />
   <link rel="stylesheet" href="/styles/layout.css" />
   <link rel="stylesheet" href="/styles/index.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&family=Special+Elite&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&family=Special+Elite&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
   <link rel="icon" type="image/x-icon" href="/images/favicon.png">
   <script src="/vendor/jquery-3.0.0.js"></script>
   <script src="https://kit.fontawesome.com/81d8ede405.js" crossorigin="anonymous"></script>
   <script src="
   https://cdn.socket.io/4.6.0/socket.io.min.js
-  " integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+  " integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
   <!-- Top nav bar for logo and to view order -->
-  <nav>
-    <span id="logo">SmokeStack</span>
-    <img class="logo-image" src="/images/favicon.png">
-    <span id="see-order">
-      <a src="/order-status">View Order</a>
-      <div id="bouncing-nav-arrow"><i class="fa-solid fa-angles-right"></i></div>
-    </span>
+  <nav class="navbar">
+    <div class="nav-left">
+      <span id="logo">SmokeStack</span>
+      <img class="logo-image" src="/images/favicon.png">
+    </div>
+    <div class="dropdown">
+      <button class="dropbtn">
+        Login &#9662
+      </button>
+      <div class="dropdown-content">
+        <a href="#">Customer</a>
+        <a href="#">Admin</a>
+      </div>
+      
+    </div> 
   </nav>
 
   <!-- header has cover photo and a tagline of some sort -->
@@ -49,6 +60,11 @@
       <hr class="underline" />
     </div>
   </header>
+  <% if (locals.isAuthenticated) { %>
+    <p>You are logged in. <a href="/profile" class="underline">View your profile</a>.</p>
+<% } else { %>
+    <p>You are not logged in. <a href="/login" class="underline">Login</a>.</p>
+<% } %>
 
   <!-- includes cart and menu items -->
   <main class="home">
@@ -62,7 +78,7 @@
 
       <h2 class="food-category">Briskets</h2>
       <div class="grid-container" id="briskets"></div>
-      
+
     </section>
 
 
@@ -92,41 +108,41 @@
 
 
 
-  <!--Confirm order form starts-->
-  <div class="overlay"></div>
-  <form id="confirmation-form" class="order-form" action="/order-status" method="get">
-    <div class="form-header">
-      <h2>Confirm Details for Pickup</h2>
-    </div>
-    <div>
-      <label for="name" class="order-label">Your name</label>
-      <div class="order-input-group">
-        <input type="text" id="name" name="name" class="order-input" placeholder="Jane Smith" required>
+    <!--Confirm order form starts-->
+    <div class="overlay"></div>
+    <form id="confirmation-form" class="order-form" action="/order-status" method="get">
+      <div class="form-header">
+        <h2>Confirm Details for Pickup</h2>
       </div>
-    </div>
-
-    <div>
-      <label for="tel" class="order-label">Your phone number</label>
-      <div class="order-input-group">
-        <input type="tel" id="tel" name="tel" class="order-input" placeholder="+1-555-5555" required>
-      </div>
-    </div>
-
-    <div>
-      <label for="message" class="order-label">Special Instructions:</label>
-      <div class="order-input-group">
-        <textarea id="message" name="message" class="order-input" rows="6" maxlength="1000"
-          placeholder="Allergies, dellivery instructions, etc."></textarea>
+      <div>
+        <label for="name" class="order-label">Your name</label>
+        <div class="order-input-group">
+          <input type="text" id="name" name="name" class="order-input" placeholder="Jane Smith" required>
+        </div>
       </div>
 
-    <div class="order-buttons">
-      <button type="button" class="btn-purchase cancel">Cancel</button>
-      <button type="submit" class="btn-purchase confirm">Confirm Order</button>
-    </div>
-  </form>
-  </div>
+      <div>
+        <label for="tel" class="order-label">Your phone number</label>
+        <div class="order-input-group">
+          <input type="tel" id="tel" name="tel" class="order-input" placeholder="+1-555-5555" required>
+        </div>
+      </div>
 
-</main>
+      <div>
+        <label for="message" class="order-label">Special Instructions:</label>
+        <div class="order-input-group">
+          <textarea id="message" name="message" class="order-input" rows="6" maxlength="1000"
+            placeholder="Allergies, dellivery instructions, etc."></textarea>
+        </div>
+
+        <div class="order-buttons">
+          <button type="button" class="btn-purchase cancel">Cancel</button>
+          <button type="submit" class="btn-purchase confirm">Confirm Order</button>
+        </div>
+    </form>
+    </div>
+
+  </main>
   <!--external scripts-->
   <script src="./scripts/restaurant-home.js"></script>
   <script src="./scripts/meals.js"></script>

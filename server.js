@@ -1,14 +1,14 @@
-// load .env data into process.env
 require("dotenv").config();
-
-
-// Web server config
 const express = require("express");
 const morgan = require("morgan");
 const cookieSession = require("cookie-session");
 const { Server } = require("socket.io");
-const PORT = process.env.PORT || 8080;
+const { auth, requiresAuth } = require('express-openid-connect');
+
+const PORT = process.env.EXPRESS_PORT;
+
 const dbClient = require("./db/connection");
+
 const app = express();
 
 app.set("view engine", "ejs");
@@ -16,6 +16,7 @@ app.set("view engine", "ejs");
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(express.json());
 
 app.use(
   cookieSession({
@@ -32,7 +33,6 @@ const smsRoutes = require("./routes/sms");
 const dbRoutes = require("./routes/db-updates");
 const orderRoutesToDabase = require('./routes/order');
 
-
 // Mount all resource routes
 app.use("/", foodApiRoutes);
 app.use("/order-status", orderStatusRoutes);
@@ -46,29 +46,54 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: process.env.AUTH0_SECRET,
+  baseURL: process.env.AUTH0_BASE_URL,
+  clientID: process.env.AUTH0_CLIENT_ID,
+  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
+};
+
+
+
+app.use(auth(config));
+
+// Middleware to make the `user` object available for all views
+app.use((req, res, next) => {
+  res.locals.user = req.oidc.user;
+  next();
+});
+
+
+// Catch 404 and forward to error handler
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+// Error handlers
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: process.env.NODE_ENV !== 'production' ? err : {}
+  });
+});
+
+
+
+app.get('/user', requiresAuth(), (req, res) => {
+  res.send(JSON.stringify(req.oidc.user));
+});
 
 const server = app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
 
 
-//auth0 router
-const { auth } = require('express-openid-connect');
 
-const config = {
-  authRequired: false,
-  auth0Logout: true,
-  secret: process.env.AUTH0_SECRET,
-  baseURL: process.env.BASE_URL,
-  clientID: process.env.CLIENT_ID,
-  issuerBaseURL: process.env.ISSUER_BASE_URL,
-};
-
-app.use(auth(config)); // auth router attaches /login, /logout, and /callback routes to the baseURL
-
-app.get('/', (req, res) => {
-  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-}); // req.isAuthenticated is provided from the auth router
 
 
 //sockets router
@@ -79,7 +104,7 @@ io.on("connection", (socket) => {
     io.emit("sentTime", data);
   });
 
-  socket.on('complete',(data) => {
+  socket.on('complete', (data) => {
     io.emit('sentComplete', data);
   });
 
