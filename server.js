@@ -46,7 +46,6 @@ app.use("/restaurants", restaurantRoutes);
 app.use('/sms', smsRoutes);
 app.use('/order', orderRoutesToDabase(dbClient));
 
-// Note: mount other resources here, using the same pattern above
 
 // Home page
 app.get("/", (req, res) => {

@@ -14,8 +14,8 @@
   <link rel="stylesheet" href="/styles/layout.css" />
   <link rel="stylesheet" href="/styles/index.css" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&family=Special+Elite&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
   <link rel="icon" type="image/x-icon" href="/images/favicon.png">
   <script src="/vendor/jquery-3.0.0.js"></script>
   <script src="https://kit.fontawesome.com/81d8ede405.js" crossorigin="anonymous"></script>
@@ -27,7 +27,7 @@
 <body>
   <!-- Top nav bar for logo and to view order -->
   <nav>
-    <span id="logo">MealHub</span>
+    <span id="logo">SmokeStack</span>
     <img class="logo-image" src="/images/favicon.png">
     <span id="see-order">
       <a src="/order-status">View Order</a>
@@ -38,7 +38,7 @@
   <!-- header has cover photo and a tagline of some sort -->
   <header class="page-header">
     <div id="header-text-layout">
-      <h2 class="animate__animated animate__fadeInUp">Authentically Canadian</h2>
+      <h2 class="animate__animated animate__fadeInUp">Authentically Texan</h2>
     </div>
   </header>
 
@@ -53,15 +53,16 @@
   <!-- includes cart and menu items -->
   <main class="home">
     <section id="menu-container">
-      <!--See meals.js for template literal-->
-      <h2 class="food-category">Briskets</h2>
-      <div class="grid-container" id="our-foods"></div>
 
       <h2 class="food-category">Fried Chicken</h2>
       <div class="grid-container" id="fried-chicken"></div>
 
       <h2 class="food-category">Sandwiches</h2>
       <div class="grid-container" id="sandwiches"></div>
+
+      <h2 class="food-category">Briskets</h2>
+      <div class="grid-container" id="briskets"></div>
+      
     </section>
 
 
@@ -127,7 +128,6 @@
 
 </main>
   <!--external scripts-->
-  <script src="./scripts/cart.js"></script>
   <script src="./scripts/restaurant-home.js"></script>
   <script src="./scripts/meals.js"></script>
 </body>

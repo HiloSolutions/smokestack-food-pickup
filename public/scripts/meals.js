@@ -1,73 +1,111 @@
-//
-// API CALL FOR MENU: Api to get menu, render the list on the page (1)
-//
+const briskets = [
+  {
+    id: 1,
+    img: '../images/grandmas-slow-cooker-brisket.jpeg',
+    name: "Grandma's Slow-Cooker Brisket",
+    price: 13.99,
+    rate: 4
+  },
+  {
+    id: 2,
+    img: '../images/classic-brisket.jpeg',
+    name: "Classic Brisket",
+    price: 12.99,
+    rate: 4.5
+  },
+
+  {
+    id: 3,
+    img: '../images/maple-garlic-brisket.jpeg',
+    name: "Maple Garlic Brisket",
+    price: 17.99,
+    rate: 4.8
+  },
+];
+
+const friedChicken = [
+  {
+    id: 4,
+    img: '../images/spicy-fried-chicken.jpg',
+    name: "Spicy Fried Chicken",
+    price: 10.99,
+    rate: 4
+  },
+  {
+    id: 5,
+    img: '../images/terriyaki-fried-chicken.jpeg',
+    name: "Terriyaki Fried Chicken",
+    price: 15.99,
+    rate: 5
+  },
+  {
+    id: 6,
+    img: '../images/fried-chicken-with-garlic-aioli.jpg',
+    name: "Fried Chicken with Garlic Aioli",
+    price: 12.99,
+    rate: 3
+  },
+];
+
+const sandwiches = [
+  {
+    id: 7,
+    img: '../images/veggie-sandwich.webp',
+    name: "Rainbow Veggie Sandwich",
+    price: 13.99,
+    rate: 4
+  },
+
+  {
+    id: 8,
+    img: '../images/caprese-sandwich.jpeg',
+    name: "Caprese Sandwich",
+    price: 15.99,
+    rate: 5
+  },
+  {
+    id: 9,
+    img: '../images/spinach-feta-sandwich.jpeg',
+    name: "Spinach Feta Sandwich",
+    price: 12.99,
+    rate: 3
+  },
+  
+];
+
+
 const loadMeals = (foodCategory) => {
-  $.get(
-    `https://free-food-menus-api-production.up.railway.app/${foodCategory}`
-  ).then(function(res) {
-    renderMealList(res, foodCategory);
-  });
+  if (foodCategory === 'briskets') {
+    renderMealList(briskets, foodCategory);
+  }
+  if (foodCategory === 'fried-chicken') {
+    renderMealList(friedChicken, foodCategory);
+  }
+  if (foodCategory === 'sandwiches') {
+    renderMealList(sandwiches, foodCategory);
+  }
 };
 
-
-
-//
-// SELECT MEALS TO SHOW ON BROWSER (2)
-//
 const renderMealList = (meals, foodCategory) => {
   $(`#${foodCategory}`).empty();
-  for (let i = 0; i <= 8; i++) {
-    // -----Only render meals if they have an image(NO 404) ----- //
-    $.get(meals[i].img)
-      .then(function(res) {
-        createMealItem(meals[i], foodCategory);
-      })
-      .catch(function(err) {
-        if (i !== 0) {
-          i--;
-        }
-      });
+  for (const meal of meals) {
+    createMealItem(meal, foodCategory);
   }
 };
 
-
-
-//
 // UPDATE MENU ITEMS: update ejs template (3)
-//
 const createMealItem = (meal, foodCategory) => {
 
-  // ------ Format Item Name ------ //
-  const mealWords = meal.id.replace(/-/g, " ").split(" ");
-  const packIndex = mealWords.indexOf("pack");
-  const kitIndex = mealWords.indexOf("kit");
-
-  if (packIndex !== -1) {
-    mealWords.splice(packIndex, mealWords.length - packIndex);
-  }
-  if (kitIndex !== -1) {
-    mealWords.splice(kitIndex, mealWords.length - kitIndex);
-  }
-
-  const mealName = mealWords
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-
-  // ----- Format Item Price ----- //
-  const revisedPrice = Math.floor(meal.price / 10) + 5.99;
-  const formattedPrice = revisedPrice.toFixed(2);
-
-  //  ----- Update ejs template ----- //
   const mealItem = $(`
     <article class="meal grow">
       <header class="meal-header">
       <div><img class="meal-image" src="${meal.img}"></div>
-      <div class="meal-name"><strong>${mealName}</strong></div>
+      <div class="meal-name"><strong>${meal.name}</strong></div>
       </header>
       <footer class="meal-footer">
         <div class="price">
           <div><strong>Price:</strong></div>
-          <div>$${formattedPrice}</div>
+          <div>$${meal.price}</div>
         </div>
         <button value="${meal.id}" id="${meal.id}" class="addtocart">
           <div><i class="fas fa-cart-plus"></i> ADD TO CART</div>
@@ -84,7 +122,7 @@ const createMealItem = (meal, foodCategory) => {
     const order = JSON.parse(localStorage.getItem('order'));
 
     if (!order[id]) {
-      order[id] = { id: meal.id, name: mealName, price: formattedPrice, qty: 1 };
+      order[id] = { id: meal.id, name: meal.name, price: meal.price, qty: 1 };
     } else {
       return alert("item already selected");
     }
@@ -206,7 +244,7 @@ $('.btn-checkout').click(function() {
 //
 // CANCEL CHECKOUT
 //
-$('.cancel').click(function() {
+$('.cancel').click(() => {
   const form = $(`#confirmation-form`)[0];
   $('.overlay').css("display", "none").fadeOut();
   $(form).hide(100);
@@ -217,7 +255,7 @@ $('.cancel').click(function() {
 //
 // CONFIRM CHECKOUT
 //
-$('.confirm').click(function() {
+$('.confirm').click(() => {
   if ($('#name').val().length === 0 || $('#tel').val().length === 0) return;
 
   //----- proceed to checkout if number of order items is > 0 -----//
@@ -249,7 +287,7 @@ $(document).ready(() => {
   const order = {};
   localStorage.setItem('order', JSON.stringify(order));
 
-  loadMeals("our-foods");
+  loadMeals("briskets");
   loadMeals("fried-chicken");
   loadMeals("sandwiches");
 });

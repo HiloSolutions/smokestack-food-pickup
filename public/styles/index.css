@@ -207,8 +207,7 @@ img {
   min-height: 75vh;
   color: rgb(51,51,51);
   font-size: 18px;
-  /* background-color: #eae9e9; */
-  background-color: #00000000;
+  background-color: #fff;
   border-radius: 10px;
   padding: 2em;
   margin-left: auto;
@@ -219,6 +218,7 @@ img {
   position: sticky;
   top: 0;
 }
+
 .cart-container h2 {
   font-family: 'Bebas Neue', cursive;
   font-size: 36px;
