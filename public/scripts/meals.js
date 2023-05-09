@@ -179,7 +179,6 @@ const createCartElement = (id) => {
 //
 const updateCartTotal = () => {
   const order = JSON.parse(localStorage.getItem('order'));
-  console.log(order);
   const total = Object.values(order).reduce((acc, cur) => {
     return acc + (cur.price * cur.qty);
   }, 0);

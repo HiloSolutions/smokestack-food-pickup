@@ -8,7 +8,6 @@ let uniqueId = 0;
 
 /********** APPEND ORDER REQUESTS **********/
 const existingOrders = JSON.parse(localStorage.getItem("orderList")) || [];
-console.log('existingOrders', existingOrders);
 
 const appendOrders = () => {
   // Check to see if userOrder is null AND it doesn't exist in existingOrders already
