@@ -1,0 +1,27 @@
+<nav class="navbar">
+  <div class="nav-left">
+    <span id="logo"><a href="/">SmokeStack</a></span>
+    <img class="logo-image" src="/images/favicon.png">
+  </div>
+
+  <div class="dropdown">
+    <% if(!isAuthenticated) { %>
+      <button class="dropbtn">
+        Login &#9662
+      </button>
+      <div class="dropdown-content">
+        <a href="/login/">Customer</a>
+        <a href="/login/">Admin</a>
+      </div>
+    <% } else { %>
+      <button class="dropbtn">
+        <%= user.nickname %> &#9662
+      </button>
+      <div class="dropdown-content">
+        <a href="/login/">Customer</a>
+        <a href="/login/">Admin</a>
+      </div>
+    <% } %>
+  </div>
+  
+</nav>

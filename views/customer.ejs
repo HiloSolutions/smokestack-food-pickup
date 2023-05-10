@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Home Page</title>
+  <title>Customer Logged In Page</title>
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,6 +29,7 @@
 
 <body>
   <%- include('partials/nav') %>
+ 
 
   <!-- header has cover photo and a tagline of some sort -->
   <header class="page-header">
@@ -44,6 +45,11 @@
       <hr class="underline" />
     </div>
   </header>
+  <% if (locals.isAuthenticated) { %>
+    <p>You are logged in. <a href="/profile" class="underline">View your profile</a>.</p>
+<% } else { %>
+    <p>You are not logged in. <a href="/login" class="underline">Login</a>.</p>
+<% } %>
 
   <!-- includes cart and menu items -->
   <main class="home">
