@@ -1,18 +1,9 @@
 const express = require('express');
-const router = express.Router();
+const router  = express.Router();
+
 
 module.exports = (db) => {
-  // router.get('/', (req, res) => {
 
-  //   db.query(`SELECT * FROM customers;`).then((data) => {
-  //     console.log("data is", data.order);
-  //     res.send("test route");
-  //   })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       res.send("test route");
-  //     });
-  // });
   const createCustomer = (nameOfCustomer, num) => {
     const customerQueryStr = `
     INSERT INTO customers (name, phone_number)
@@ -63,7 +54,6 @@ module.exports = (db) => {
       });
   };
 
-
   const createOrderMeals = (orderId, orderObj) => {
     Object.values(orderObj).forEach(mealObj => {
       const mealName = mealObj.name;
@@ -87,7 +77,6 @@ module.exports = (db) => {
 
   };
 
-
   router.post('/', (req, res) => {
     console.log('body:', req.body);
     createCustomer(req.body.name, req.body.tel)
@@ -104,6 +93,11 @@ module.exports = (db) => {
 
     return res.send("data posted");
   });
+
+  router.get('/', (req, res) => {
+    res.render('order-status');
+  });
+  
 
   return router;
 };

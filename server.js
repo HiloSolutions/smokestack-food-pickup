@@ -1,14 +1,17 @@
 const express = require('express');
 const cookieSession = require('cookie-session');
 const dbClient = require('./db/connection');
-const indexRouter = require('./routes/index.js');
 const { auth } = require('express-openid-connect');
-const orderStatusRoutes = require('./routes/order-status');
-const restaurantRoutes = require('./routes/restaurant-home');
-const dbRoutes = require('./routes/db-updates');
-const orderRoutesToDabase = require('./routes/order');
 //const { Server } = require('socket.io');
+
+//import router
+const indexRouter = require('./routes/index.js');
+const orderController = require('./routes/orders');
+const customerController = require('./routes/customers');
+const adminController = require('./routes/restaurantDashboard');
+const databaseController = require('./routes/database');
 //const smsRoutes = require('./routes/sms');
+
 require('dotenv').config();
 
 const PORT = process.env.EXPRESS_PORT;
@@ -38,12 +41,14 @@ app.use(
 
 app.use(auth(config));
 
+
+//use router
 app.use('/', indexRouter);
-app.use('/order-status', orderStatusRoutes);
-app.use('/send-order', dbRoutes);
-app.use('/restaurants', restaurantRoutes);
-//app.use('/sms', smsRoutes);
-app.use('/order', orderRoutesToDabase(dbClient));
+app.use('/orders', orderController);
+app.use('/customers', customerController);
+app.use('/admin', adminController);
+app.use('/api/database', databaseController);
+
 
 app.use((req, res, next) => {
   res.locals.user = req.oidc.user;

@@ -272,11 +272,11 @@ $('.confirm').click(() => {
     console.log("db res is:", res);
   });
 
-  $.get('/sms/placed')
-  socket.emit('newOrder', 'awesome!');
-  //-----If the customer returns to the order page, the order button will be visible -----//
-  const seeOrderBtn = $(`#see-order`)[0];
-  $(seeOrderBtn).show(100);
+  // $.get('/sms/placed')
+  // socket.emit('newOrder', 'awesome!');
+  // //-----If the customer returns to the order page, the order button will be visible -----//
+  // const seeOrderBtn = $(`#see-order`)[0];
+  // $(seeOrderBtn).show(100);
 
 });
 

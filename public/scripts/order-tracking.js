@@ -1,4 +1,4 @@
-const socket = io();
+//const socket = io();
 
 // ---- REQUIRE IN ORDER ----- //
 
@@ -77,17 +77,17 @@ function submitReview() {
 }
 
 // ---- CLICK LISTENERS ---- //
-$(function() {
-  socket.on('sentTime', data => {
-    $("#initial-order").slideUp();
-    $("#order-estimate").slideDown();
-    createOrderEstimate(data);
-  })
+// $(function() {
+//   socket.on('sentTime', data => {
+//     $("#initial-order").slideUp();
+//     $("#order-estimate").slideDown();
+//     createOrderEstimate(data);
+//   })
 
-  socket.on('sentComplete', data => {
-    $("#order-complete").slideDown();
-    $("#order-estimate").slideUp();
-  })
+//   socket.on('sentComplete', data => {
+//     $("#order-complete").slideDown();
+//     $("#order-estimate").slideUp();
+//   })
 
   // $("#order-complete-button").click(function () {
 
