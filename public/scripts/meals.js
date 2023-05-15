@@ -1,90 +1,22 @@
-const briskets = [
-  {
-    id: 1,
-    img: '../images/grandmas-slow-cooker-brisket.jpeg',
-    name: "Grandma's Slow-Cooker Brisket",
-    price: 13.99,
-    rate: 4
-  },
-  {
-    id: 2,
-    img: '../images/classic-brisket.jpeg',
-    name: "Classic Brisket",
-    price: 12.99,
-    rate: 4.5
-  },
-
-  {
-    id: 3,
-    img: '../images/maple-garlic-brisket.jpeg',
-    name: "Maple Garlic Brisket",
-    price: 17.99,
-    rate: 4.8
-  },
-];
-
-const friedChicken = [
-  {
-    id: 4,
-    img: '../images/spicy-fried-chicken.jpg',
-    name: "Spicy Fried Chicken",
-    price: 10.99,
-    rate: 4
-  },
-  {
-    id: 5,
-    img: '../images/terriyaki-fried-chicken.jpeg',
-    name: "Terriyaki Fried Chicken",
-    price: 15.99,
-    rate: 5
-  },
-  {
-    id: 6,
-    img: '../images/fried-chicken-with-garlic-aioli.jpg',
-    name: "Fried Chicken with Garlic Aioli",
-    price: 12.99,
-    rate: 3
-  },
-];
-
-const sandwiches = [
-  {
-    id: 7,
-    img: '../images/veggie-sandwich.webp',
-    name: "Rainbow Veggie Sandwich",
-    price: 13.99,
-    rate: 4
-  },
-
-  {
-    id: 8,
-    img: '../images/caprese-sandwich.jpeg',
-    name: "Caprese Sandwich",
-    price: 15.99,
-    rate: 5
-  },
-  {
-    id: 9,
-    img: '../images/spinach-feta-sandwich.jpeg',
-    name: "Spinach Feta Sandwich",
-    price: 12.99,
-    rate: 3
-  },
-  
-];
-
-
-const loadMeals = (foodCategory) => {
-  if (foodCategory === 'briskets') {
-    renderMealList(briskets, foodCategory);
-  }
-  if (foodCategory === 'fried-chicken') {
-    renderMealList(friedChicken, foodCategory);
-  }
-  if (foodCategory === 'sandwiches') {
-    renderMealList(sandwiches, foodCategory);
-  }
+const loadMeals = () => {
+  fetch('http://localhost:8080/menu')
+    .then((res) => {
+      console.log('response', res.data);
+      if (res.foodCategory === 'briskets') {
+        renderMealList(res.meals, 'briskets');
+      }
+      if (res.foodCategory === 'fried-chicken') {
+        renderMealList(res.meals, 'fried-chicken');
+      }
+      if (res.foodCategory === 'sandwiches') {
+        renderMealList(res.meals, 'sandwiches');
+      }
+    })
+    .catch((err) => {
+      console.log('Error (loadMeals)', err);
+    });
 };
+
 
 const renderMealList = (meals, foodCategory) => {
   $(`#${foodCategory}`).empty();
