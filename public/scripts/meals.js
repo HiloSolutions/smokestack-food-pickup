@@ -1,38 +1,38 @@
+//get menu items from database
 const loadMeals = () => {
   fetch('http://localhost:8080/menu')
     .then((res) => {
-      console.log('response', res.data);
-      if (res.foodCategory === 'briskets') {
-        renderMealList(res.meals, 'briskets');
-      }
-      if (res.foodCategory === 'fried-chicken') {
-        renderMealList(res.meals, 'fried-chicken');
-      }
-      if (res.foodCategory === 'sandwiches') {
-        renderMealList(res.meals, 'sandwiches');
-      }
+      return res.json();
     })
+    .then((data) => {
+      renderMealList(data.briskets, 'briskets');
+      renderMealList(data.friedChicken, 'fried-chicken');
+      renderMealList(data.sandwiches, 'sandwiches');
+    })
+
     .catch((err) => {
       console.log('Error (loadMeals)', err);
     });
 };
 
-
-const renderMealList = (meals, foodCategory) => {
+//load menu items onto browser
+const renderMealList = (items, foodCategory) => {
   $(`#${foodCategory}`).empty();
-  for (const meal of meals) {
-    createMealItem(meal, foodCategory);
+
+  for (const item in items) {
+    createMealItem(items[item], foodCategory);
   }
+
 };
 
-// UPDATE MENU ITEMS: update ejs template (3)
+//create the menu items
 const createMealItem = (meal, foodCategory) => {
 
   const mealItem = $(`
     <article class="meal grow">
       <header class="meal-header">
       <div><img class="meal-image" src="${meal.img}"></div>
-      <div class="meal-name"><strong>${meal.name}</strong></div>
+      <div class="meal-name"><strong>${meal.meal_name}</strong></div>
       </header>
       <footer class="meal-footer">
         <div class="price">
@@ -54,7 +54,7 @@ const createMealItem = (meal, foodCategory) => {
     const order = JSON.parse(localStorage.getItem('order'));
 
     if (!order[id]) {
-      order[id] = { id: meal.id, name: meal.name, price: meal.price, qty: 1 };
+      order[id] = { id: meal.id, name: meal.meal_name, price: meal.price, qty: 1 };
     } else {
       return alert("item already selected");
     }
@@ -66,13 +66,11 @@ const createMealItem = (meal, foodCategory) => {
 };
 
 
-//
-//CREATE CART ELEMENT: takes in menu item object, returns a cart <article>
-//
+
+//takes in menu item object, returns a cart <article>
 const createCartElement = (id) => {
   const order = JSON.parse(localStorage.getItem('order'));
 
-  //----- show item on browser in the cart -----//
   const $cartItem = $(
     `
       <div class="cart-row" id="cart-row.${order[id].id}">
@@ -87,17 +85,18 @@ const createCartElement = (id) => {
   );
 
   $('.cart-items').append($cartItem);
-  //----- add event listener to remove item from cart and local storage updates -----//
+  //add event listener to remove item from cart and local storage updates
   $(`#remove-cart-${order[id].id}`)[0].addEventListener('click', (e) => {
     const btnClicked = e.target;
     const row = btnClicked.parentElement.parentElement;
     removeItemFromOrder(row);
   });
 
-  //----- add event listener to update quantity and local storage updates -----//
+  //add event listener to update quantity and local storage updates
   $(`#update-cart-${order[id].id}`)[0].addEventListener('change', (e) => {
     const item = e.target;
     const qty = $(item).val()[0];
+    console.log('item', qty);
     updateCartQuantity(id, qty);
 
   });
@@ -106,9 +105,8 @@ const createCartElement = (id) => {
 };
 
 
-//
+
 //CALCULATE TOTAL: takes in id (string) of menu item and tracks cart total
-//
 const updateCartTotal = () => {
   const order = JSON.parse(localStorage.getItem('order'));
   const total = Object.values(order).reduce((acc, cur) => {
@@ -218,7 +216,7 @@ $(document).ready(() => {
   const order = {};
   localStorage.setItem('order', JSON.stringify(order));
 
-  loadMeals("briskets");
-  loadMeals("fried-chicken");
-  loadMeals("sandwiches");
+  loadMeals();
 });
+
+

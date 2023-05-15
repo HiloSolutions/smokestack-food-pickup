@@ -14,12 +14,24 @@ router.get('/', (req, res) => {
 router.get('/menu', (req, res) => {
   console.log("getting menu items");
 
-  const queryStr = `SELECT * FROM users`;
+  const queryStr = `SELECT * FROM meals`;
 
   db.query(queryStr)
     .then((result) => {
-      console.log('jhsgdhsg', result.rows.length);
-      res.json(result.rows);
+
+      const organizedResult = result.rows.reduce((result, item) => {
+        const { menu_category, id } = item;
+
+        if (!result[menu_category]) {
+          result[menu_category] = {};
+        }
+
+        result[menu_category][id] = item;
+        return result;
+      }, {});
+
+      res.json(organizedResult);
+      console.log(organizedResult);
     })
 
     .catch((err) => {
