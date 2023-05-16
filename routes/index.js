@@ -4,15 +4,18 @@ const db = require("../db/connection");
 const { requiresAuth } = require('express-openid-connect');
 
 router.get('/', (req, res) => {
+  const isAuthenticated = req.oidc.isAuthenticated();
+  
   res.render("index", {
-    isAuthenticated: req.oidc.isAuthenticated(),
+    isAuthenticated,
     user: req.oidc.user
   });
+
 });
+
 
 //get menu items from database to display on home page
 router.get('/menu', (req, res) => {
-  console.log("getting menu items");
 
   const queryStr = `SELECT * FROM meals`;
 
@@ -31,7 +34,6 @@ router.get('/menu', (req, res) => {
       }, {});
 
       res.json(organizedResult);
-      console.log(organizedResult);
     })
 
     .catch((err) => {
@@ -40,6 +42,8 @@ router.get('/menu', (req, res) => {
 
 });
 
+
+//show user infirmation when they are logged in
 router.get('/customer', requiresAuth(), (req, res) => {
   res.render("customer", {
     isAuthenticated: req.oidc.isAuthenticated(),

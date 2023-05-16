@@ -15,6 +15,23 @@ const loadMeals = () => {
     });
 };
 
+
+
+const checkAuthStatus = () => {
+  fetch('http://localhost:8080/customers/authenticationCheck')
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((err) => {
+      console.log('Error (checkAuthStatus)', err);
+    });
+};
+
+
+
 //load menu items onto browser
 const renderMealList = (items, foodCategory) => {
   $(`#${foodCategory}`).empty();
@@ -24,6 +41,8 @@ const renderMealList = (items, foodCategory) => {
   }
 
 };
+
+
 
 //create the menu items
 const createMealItem = (meal, foodCategory) => {
@@ -77,7 +96,7 @@ const createCartElement = (id) => {
         <span class="cart-col-1 cart-column name" id="${order[id].id}">${order[id].name}</span>
         <span class="cart-col-2 cart-column price">$${order[id].price}</span>
         <div class="cart-col-3 cart-column qty">
-          <input class="cart-col-3-input" id="update-cart-${order[id].id}" type="number" value="1" min="0" max="99">
+          <input class="cart-col-3-input" id="update-cart-${order[id].id}" type="number" value="1" min="0" max="9">
           <button class="btn btn-danger" id="remove-cart-${order[id].id}" type="button">x</button>
         </div>
       </div>
@@ -96,7 +115,6 @@ const createCartElement = (id) => {
   $(`#update-cart-${order[id].id}`)[0].addEventListener('change', (e) => {
     const item = e.target;
     const qty = $(item).val()[0];
-    console.log('item', qty);
     updateCartQuantity(id, qty);
 
   });
@@ -123,13 +141,16 @@ const updateCartTotal = () => {
 };
 
 
-//
-// UPDATE QTY: when qty is changed in cart, update order object. qty cannot exceed 99 or go below 0
-//
+
+//when qty is changed in cart, update order object. qty cannot exceed 99 or go below 0
 const updateCartQuantity = (id, numOfItems) => {
   const order = JSON.parse(localStorage.getItem('order'));
+
   order[id].qty = Number(numOfItems);
+
+  localStorage.setItem('order', JSON.stringify(order));
   updateCartTotal();
+
 };
 
 
@@ -149,10 +170,9 @@ const removeItemFromOrder = (item) => {
 };
 
 
-//
+
 // PROCEED TO CHECKOUT
-//
-$('.btn-checkout').click(function() {
+$('.btn-checkout').click(() => {
 
   const order = JSON.parse(localStorage.getItem('order'));
 
@@ -160,12 +180,24 @@ $('.btn-checkout').click(function() {
   const numOfItems = Object.values(order).reduce((acc, cur) => {
     return acc + (cur.qty);
   }, 0);
-  if (numOfItems === 0) return alert("please select an item");
 
-  //----- proceed to checkout if number of order items is > 0 -----//
+  //check that user is logged in
+
+
+  // const loggedIn = checkAuthStatus();
+  // if (!loggedIn) {
+  //   return alert("please log in");
+  // }
+  //check that qty is > 0
+  if (numOfItems === 0) {
+    return alert("please select an item");
+  }
+
+  //proceed to checkout if logged in AND number of order items is > 0
   const form = $(`#confirmation-form`)[0];
   $('.overlay').css("display", "block").fadeIn();
   $(form).show(100);
+
 });
 
 
@@ -218,5 +250,3 @@ $(document).ready(() => {
 
   loadMeals();
 });
-
-
