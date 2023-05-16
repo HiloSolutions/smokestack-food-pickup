@@ -7,6 +7,7 @@ const db = require("../connection");
 
 
 
+
 // query to get all orders (these are the inset statements e will need to start)
 const getAllOrders = () => {
   //const sqlUser =

@@ -1,106 +1,57 @@
-const briskets = [
-  {
-    id: 1,
-    img: '../images/grandmas-slow-cooker-brisket.jpeg',
-    name: "Grandma's Slow-Cooker Brisket",
-    price: 13.99,
-    rate: 4
-  },
-  {
-    id: 2,
-    img: '../images/classic-brisket.jpeg',
-    name: "Classic Brisket",
-    price: 12.99,
-    rate: 4.5
-  },
+//get menu items from database
+const loadMeals = () => {
+  fetch('http://localhost:8080/menu')
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      renderMealList(data.briskets, 'briskets');
+      renderMealList(data.friedChicken, 'fried-chicken');
+      renderMealList(data.sandwiches, 'sandwiches');
+    })
 
-  {
-    id: 3,
-    img: '../images/maple-garlic-brisket.jpeg',
-    name: "Maple Garlic Brisket",
-    price: 17.99,
-    rate: 4.8
-  },
-];
-
-const friedChicken = [
-  {
-    id: 4,
-    img: '../images/spicy-fried-chicken.jpg',
-    name: "Spicy Fried Chicken",
-    price: 10.99,
-    rate: 4
-  },
-  {
-    id: 5,
-    img: '../images/terriyaki-fried-chicken.jpeg',
-    name: "Terriyaki Fried Chicken",
-    price: 15.99,
-    rate: 5
-  },
-  {
-    id: 6,
-    img: '../images/fried-chicken-with-garlic-aioli.jpg',
-    name: "Fried Chicken with Garlic Aioli",
-    price: 12.99,
-    rate: 3
-  },
-];
-
-const sandwiches = [
-  {
-    id: 7,
-    img: '../images/veggie-sandwich.webp',
-    name: "Rainbow Veggie Sandwich",
-    price: 13.99,
-    rate: 4
-  },
-
-  {
-    id: 8,
-    img: '../images/caprese-sandwich.jpeg',
-    name: "Caprese Sandwich",
-    price: 15.99,
-    rate: 5
-  },
-  {
-    id: 9,
-    img: '../images/spinach-feta-sandwich.jpeg',
-    name: "Spinach Feta Sandwich",
-    price: 12.99,
-    rate: 3
-  },
-  
-];
-
-
-const loadMeals = (foodCategory) => {
-  if (foodCategory === 'briskets') {
-    renderMealList(briskets, foodCategory);
-  }
-  if (foodCategory === 'fried-chicken') {
-    renderMealList(friedChicken, foodCategory);
-  }
-  if (foodCategory === 'sandwiches') {
-    renderMealList(sandwiches, foodCategory);
-  }
+    .catch((err) => {
+      console.log('Error (loadMeals)', err);
+    });
 };
 
-const renderMealList = (meals, foodCategory) => {
+
+
+const checkAuthStatus = () => {
+  fetch('http://localhost:8080/customers/authenticationCheck')
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((err) => {
+      console.log('Error (checkAuthStatus)', err);
+    });
+};
+
+
+
+//load menu items onto browser
+const renderMealList = (items, foodCategory) => {
   $(`#${foodCategory}`).empty();
-  for (const meal of meals) {
-    createMealItem(meal, foodCategory);
+
+  for (const item in items) {
+    createMealItem(items[item], foodCategory);
   }
+
 };
 
-// UPDATE MENU ITEMS: update ejs template (3)
+
+
+//create the menu items
 const createMealItem = (meal, foodCategory) => {
 
   const mealItem = $(`
     <article class="meal grow">
       <header class="meal-header">
       <div><img class="meal-image" src="${meal.img}"></div>
-      <div class="meal-name"><strong>${meal.name}</strong></div>
+      <div class="meal-name"><strong>${meal.meal_name}</strong></div>
       </header>
       <footer class="meal-footer">
         <div class="price">
@@ -122,7 +73,7 @@ const createMealItem = (meal, foodCategory) => {
     const order = JSON.parse(localStorage.getItem('order'));
 
     if (!order[id]) {
-      order[id] = { id: meal.id, name: meal.name, price: meal.price, qty: 1 };
+      order[id] = { id: meal.id, name: meal.meal_name, price: meal.price, qty: 1 };
     } else {
       return alert("item already selected");
     }
@@ -134,20 +85,18 @@ const createMealItem = (meal, foodCategory) => {
 };
 
 
-//
-//CREATE CART ELEMENT: takes in menu item object, returns a cart <article>
-//
+
+//takes in menu item object, returns a cart <article>
 const createCartElement = (id) => {
   const order = JSON.parse(localStorage.getItem('order'));
 
-  //----- show item on browser in the cart -----//
   const $cartItem = $(
     `
       <div class="cart-row" id="cart-row.${order[id].id}">
         <span class="cart-col-1 cart-column name" id="${order[id].id}">${order[id].name}</span>
         <span class="cart-col-2 cart-column price">$${order[id].price}</span>
         <div class="cart-col-3 cart-column qty">
-          <input class="cart-col-3-input" id="update-cart-${order[id].id}" type="number" value="1" min="0" max="99">
+          <input class="cart-col-3-input" id="update-cart-${order[id].id}" type="number" value="1" min="0" max="9">
           <button class="btn btn-danger" id="remove-cart-${order[id].id}" type="button">x</button>
         </div>
       </div>
@@ -155,14 +104,14 @@ const createCartElement = (id) => {
   );
 
   $('.cart-items').append($cartItem);
-  //----- add event listener to remove item from cart and local storage updates -----//
+  //add event listener to remove item from cart and local storage updates
   $(`#remove-cart-${order[id].id}`)[0].addEventListener('click', (e) => {
     const btnClicked = e.target;
     const row = btnClicked.parentElement.parentElement;
     removeItemFromOrder(row);
   });
 
-  //----- add event listener to update quantity and local storage updates -----//
+  //add event listener to update quantity and local storage updates
   $(`#update-cart-${order[id].id}`)[0].addEventListener('change', (e) => {
     const item = e.target;
     const qty = $(item).val()[0];
@@ -174,12 +123,10 @@ const createCartElement = (id) => {
 };
 
 
-//
+
 //CALCULATE TOTAL: takes in id (string) of menu item and tracks cart total
-//
 const updateCartTotal = () => {
   const order = JSON.parse(localStorage.getItem('order'));
-  console.log(order);
   const total = Object.values(order).reduce((acc, cur) => {
     return acc + (cur.price * cur.qty);
   }, 0);
@@ -194,13 +141,16 @@ const updateCartTotal = () => {
 };
 
 
-//
-// UPDATE QTY: when qty is changed in cart, update order object. qty cannot exceed 99 or go below 0
-//
+
+//when qty is changed in cart, update order object. qty cannot exceed 99 or go below 0
 const updateCartQuantity = (id, numOfItems) => {
   const order = JSON.parse(localStorage.getItem('order'));
+
   order[id].qty = Number(numOfItems);
+
+  localStorage.setItem('order', JSON.stringify(order));
   updateCartTotal();
+
 };
 
 
@@ -220,10 +170,9 @@ const removeItemFromOrder = (item) => {
 };
 
 
-//
+
 // PROCEED TO CHECKOUT
-//
-$('.btn-checkout').click(function() {
+$('.btn-checkout').click(() => {
 
   const order = JSON.parse(localStorage.getItem('order'));
 
@@ -231,12 +180,24 @@ $('.btn-checkout').click(function() {
   const numOfItems = Object.values(order).reduce((acc, cur) => {
     return acc + (cur.qty);
   }, 0);
-  if (numOfItems === 0) return alert("please select an item");
 
-  //----- proceed to checkout if number of order items is > 0 -----//
+  //check that user is logged in
+
+
+  // const loggedIn = checkAuthStatus();
+  // if (!loggedIn) {
+  //   return alert("please log in");
+  // }
+  //check that qty is > 0
+  if (numOfItems === 0) {
+    return alert("please select an item");
+  }
+
+  //proceed to checkout if logged in AND number of order items is > 0
   const form = $(`#confirmation-form`)[0];
   $('.overlay').css("display", "block").fadeIn();
   $(form).show(100);
+
 });
 
 
@@ -273,11 +234,11 @@ $('.confirm').click(() => {
     console.log("db res is:", res);
   });
 
-  $.get('/sms/placed')
-  socket.emit('newOrder', 'awesome!');
-  //-----If the customer returns to the order page, the order button will be visible -----//
-  const seeOrderBtn = $(`#see-order`)[0];
-  $(seeOrderBtn).show(100);
+  // $.get('/sms/placed')
+  // socket.emit('newOrder', 'awesome!');
+  // //-----If the customer returns to the order page, the order button will be visible -----//
+  // const seeOrderBtn = $(`#see-order`)[0];
+  // $(seeOrderBtn).show(100);
 
 });
 
@@ -287,7 +248,5 @@ $(document).ready(() => {
   const order = {};
   localStorage.setItem('order', JSON.stringify(order));
 
-  loadMeals("briskets");
-  loadMeals("fried-chicken");
-  loadMeals("sandwiches");
+  loadMeals();
 });

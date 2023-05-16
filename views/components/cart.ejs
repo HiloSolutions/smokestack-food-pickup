@@ -1,0 +1,25 @@
+<section class="cart-container">
+  <h2>Review order</h2>
+  <!--labels for order items-->
+  <div class="cart-row">
+    <span class="cart-col-1 cart-column">ITEM</span>
+    <span class="cart-col-2 cart-column">PRICE</span>
+    <span class="cart-col-3 cart-column" id="qty-header">QTY</span>
+  </div>
+  <!--list of order items-->
+  <article class="cart-items"></article>
+
+
+  <!--totals-->
+  <div class="cart-total">
+    <strong class="cart-total-title">Total</strong>
+    <span class="cart-total-price">$0.00</span>
+  </div>
+  <!--submit order-->
+  <% if(!isAuthenticated) { %>
+    <button id="checkoutButton" class="btn btn-checkout">Checkout</button>
+    <% } else { %>
+      <button id="checkoutButton" class="btn btn-checkout">Checkout</button>
+      <% } %>
+
+</section>

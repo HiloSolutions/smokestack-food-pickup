@@ -1,6 +1,7 @@
 //PG database client / connection setup
 const { Pool } = require('pg');
 
+
 const dbParams = {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -12,7 +13,11 @@ const dbParams = {
 const db = new Pool(dbParams);
 
 db.connect()
-  .then(() => { console.log('connected to db') })
-  .catch((err) => { console.log(err) });
+  .then(() => {
+    console.log('connected to db');
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 module.exports = db;

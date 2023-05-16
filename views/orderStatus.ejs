@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../vendor/border-box.css" />
     <link rel="stylesheet" href="../styles/main.css" />
     <link rel="stylesheet" href="../styles/layout.css" />
-    <link rel="stylesheet" href="../styles/order-status.css"/>
+    <link rel="stylesheet" href="../styles/orderStatus.css"/>
 
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&family=Special+Elite&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/81d8ede405.js" crossorigin="anonymous"></script>
@@ -28,10 +28,8 @@
   </head>
 
   <body>
-    <nav>
-      <span id="logo">MeatHub</span>
-      <a class="home-button" href="/">Return Home</a>
-    </nav>
+    <%- include('partials/nav') %>
+    
     <header class="page-header2">
       <h2 class="page-title">Order Successful!</h2>
     </header>

@@ -1,6 +1,8 @@
 
 const express = require('express');
 const router  = express.Router();
+const db = require("../db/connection");
+const { requiresAuth } = require('express-openid-connect');
 // const ordersQueries = require('../db/queries/orders');
 
 const orders = {
@@ -13,7 +15,7 @@ const orders = {
     },
     name: 'Robbie',
     number: 7801234567,
-    order_time: '1:15pm',
+    orderTime: '1:15pm',
     customRequest: 'No peanuts pls'
   },
   2: {
@@ -25,7 +27,7 @@ const orders = {
     },
     name: 'Faye',
     number: 7801234567,
-    order_time: '1:15pm',
+    orderTime: '1:15pm',
     customRequest: 'No peanuts pls'
   },
   3: {
@@ -37,7 +39,7 @@ const orders = {
     },
     name: 'Lauren',
     number: 7801234567,
-    order_time: '1:15pm',
+    orderTime: '1:15pm',
     customRequest: 'No peanuts pls'
   }
 };

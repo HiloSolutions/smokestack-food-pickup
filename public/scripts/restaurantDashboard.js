@@ -3,12 +3,11 @@
 const userOrder = JSON.parse(localStorage.getItem("userOrder"));
 const d = new Date();
 const orderTime = d.toLocaleTimeString();
-const socket = io();
+//const socket = io();
 let uniqueId = 0;
 
 /********** APPEND ORDER REQUESTS **********/
 const existingOrders = JSON.parse(localStorage.getItem("orderList")) || [];
-console.log('existingOrders', existingOrders);
 
 const appendOrders = () => {
   // Check to see if userOrder is null AND it doesn't exist in existingOrders already
@@ -91,7 +90,7 @@ const createRequestElement = function (orderObj, id) {
     // Set time to the current order
     orderObj.time = $(`#${id}-input`).val();
     localStorage.setItem("orderList", JSON.stringify(existingOrders));
-    socket.emit("time", $(`#${id}-input`).val());
+    //socket.emit("time", $(`#${id}-input`).val());
     $.post("/sms/orderTime", { time: $(`#${id}-input`).val() });
   });
 };
@@ -134,7 +133,7 @@ const addToProcessedOrders = (orderObj, id) => {
 
 
 
-    socket.emit("complete", "awesome!");
+    //socket.emit("complete", "awesome!");
     $.get("/sms/completed");
   });
 };
@@ -158,17 +157,17 @@ $(document).ready(function (event) {
 
   // Add individual new orders whenever cart is submitted
 
-  socket.on("sentNewOrder", () => {
+  // socket.on("sentNewOrder", () => {
 
-    uniqueId++;
+  //   uniqueId++;
 
-    const newOrder = JSON.parse(localStorage.getItem("userOrder"));
-    existingOrders.push(newOrder);
-    localStorage.setItem("orderList", JSON.stringify(existingOrders));
-    createRequestElement(newOrder, uniqueId);
+  //   const newOrder = JSON.parse(localStorage.getItem("userOrder"));
+  //   existingOrders.push(newOrder);
+  //   localStorage.setItem("orderList", JSON.stringify(existingOrders));
+  //   createRequestElement(newOrder, uniqueId);
 
-  });
+  // });
 
-  // if()
+
 
 });

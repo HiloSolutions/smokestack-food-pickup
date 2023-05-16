@@ -1,77 +1,77 @@
-// load .env data into process.env
-require("dotenv").config();
+const express = require('express');
+const dbClient = require('./db/connection');
+const { auth } = require('express-openid-connect');
+//const { Server } = require('socket.io');
 
-// Web server config
-const express = require("express");
-const morgan = require("morgan");
-const cookieSession = require("cookie-session");
-const { Server } = require("socket.io");
+//import router
+const indexRouter = require('./routes/index.js');
+const orderController = require('./routes/orders');
+const customerController = require('./routes/customers');
+const adminController = require('./routes/restaurantDashboard');
+const databaseController = require('./routes/database');
+//const smsRoutes = require('./routes/sms');
 
-const PORT = process.env.PORT || 8080;
+require('dotenv').config();
 
-
-
-const dbClient = require("./db/connection");
+const PORT = process.env.EXPRESS_PORT;
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: process.env.SECRET,
+  baseURL: process.env.BASEURL,
+  clientID: process.env.CLIENTID,
+  issuerBaseURL: process.env.ISSUER
+};
 
 const app = express();
+app.set('views', 'views');
+app.set('view engine', 'ejs');
 
-app.set("view engine", "ejs");
-
-
-app.use(morgan("dev"));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(express.static('public'));
 
-app.use(
-  cookieSession({
-    name: "session",
-    keys: ["test"],
-  })
-);
-
-// Separated Routes for each Resource
-const foodApiRoutes = require("./routes/food-api");
-const orderStatusRoutes = require("./routes/order-status");
-const restaurantRoutes = require("./routes/restaurant-home");
-const smsRoutes = require("./routes/sms");
-const dbRoutes = require("./routes/db-updates");
-const orderRoutesToDabase = require('./routes/order');
+app.use(auth(config));
 
 
-// Mount all resource routes
-app.use("/", foodApiRoutes);
-app.use("/order-status", orderStatusRoutes);
-app.use("/send-order", dbRoutes);
-app.use("/restaurants", restaurantRoutes);
-app.use('/sms', smsRoutes);
-app.use('/order', orderRoutesToDabase(dbClient));
+//use router
+app.use('/', indexRouter);
+app.use('/orders', orderController);
+app.use('/customers', customerController);
+app.use('/admin', adminController);
+app.use('/api/database', databaseController);
 
 
-// Home page
-app.get("/", (req, res) => {
-  res.render("index");
+app.use((req, res, next) => {
+  res.locals.user = req.oidc.user;
+  next();
 });
 
 
-const server = app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`);
+
+app.listen(PORT, () => {
+  console.log(`Express is listening on port ${PORT}`);
 });
 
-const io = new Server(server);
 
-io.on("connection", (socket) => {
-  socket.on("time", (data) => {
-    console.log(data);
-    io.emit("sentTime", data);
-  });
 
-  socket.on('complete',(data) => {
-    io.emit('sentComplete', data);
-  });
 
-  socket.on('newOrder', (data) => {
-    io.emit('sentNewOrder', data);
-  });
-});
 
-io.listen(3000);
+//sockets router
+// const io = new Server(server);
+
+// io.on('connection', (socket) => {
+//   socket.on('time', (data) => {
+//     io.emit('sentTime', data);
+//   });
+
+//   socket.on('complete', (data) => {
+//     io.emit('sentComplete', data);
+//   });
+
+//   socket.on('newOrder', (data) => {
+//     io.emit('sentNewOrder', data);
+//   });
+// });
+
+// io.listen(3000);
