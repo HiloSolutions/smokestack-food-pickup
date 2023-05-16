@@ -15,53 +15,19 @@ router.get('/', (req, res) => {
 });
 
 
-router.post('/', (req, res) => {
-  console.log('body:', req.body);
-  createCustomer(req.body.name, req.body.tel)
-    .then((customer) => {
-      createOrder(customer.id, req.body.message)
-        .then((order) => {
-          createOrderMeals(order.id, req.body.order);
-        });
-    })
-    .catch((err) => {
-      console.log("customer creation failed:", err);
-    });
 
-
-  return res.send("data posted");
-});
-
-
-
-
-
-const createCustomer = (nameOfCustomer, num) => {
-  const customerQueryStr = `
-    INSERT INTO customers (name, phone_number)
-    VALUES ($1, $2)
-    RETURNING *;
-    `;
-  const customerQueryValues = [nameOfCustomer, num];
-
-  return db.query(customerQueryStr, customerQueryValues)
-    .then((customerData) => {
-      const customer = customerData.rows[0];
-      console.log("customer data is", customer);
-      return customer;
-    });
-};
-
-const createOrder = (customerId, specialinstructions) => {
-  const orderQueryStr = `
+//function to add order information into the database
+const addOrderToDatabase = (customerId, specialinstructions) => {
+  console.log(customerId, specialinstructions);
+  const queryStr = `
      INSERT INTO orders (customer_id, is_fulfilled, special_instructions)
      VALUES ($1, FALSE, $2)
      RETURNING *;
      `;
 
-  const orderQueryValues = [customerId, specialinstructions];
+  const queryValues = [customerId, specialinstructions];
 
-  return db.query(orderQueryStr, orderQueryValues)
+  return db.query(queryStr, queryValues)
     .then((orderData) => {
       const order = orderData.rows[0];
       console.log("order data is", order);
@@ -69,24 +35,29 @@ const createOrder = (customerId, specialinstructions) => {
     });
 };
 
-const mealOrderConnector = (qty, mealId, orderId) => {
-  const queryStr = `
-     INSERT INTO order_meals (order_id, meal_id, meal_quantity)
-     VALUES ($1, $2, $3)
-     RETURNING *;
-     `;
 
-  const queryValues = [qty, mealId, orderId];
+
+//function to add customer information into the database
+const addCustomerToDatabase = (nameOfCustomer, num) => {
+  const queryStr = `
+    INSERT INTO customers (name, phone_number)
+    VALUES ($1, $2)
+    RETURNING *;
+    `;
+  const queryValues = [nameOfCustomer, num];
 
   return db.query(queryStr, queryValues)
-    .then((data) => {
-      const joinRow = data.rows[0];
-      console.log("joinRow data is", joinRow);
-      return joinRow;
+    .then((customerData) => {
+      const customer = customerData.rows[0];
+      console.log("customer data is", customer);
+      return customer;
     });
 };
 
-const createOrderMeals = (orderId, orderObj) => {
+
+
+//function to add order_meals information into the database
+const addOrderMealsToDatabase = (orderId, orderObj) => {
   Object.values(orderObj).forEach(mealObj => {
     const mealName = mealObj.name;
     const mealQuantity = mealObj.qty;
@@ -108,6 +79,52 @@ const createOrderMeals = (orderId, orderObj) => {
   });
 
 };
+
+
+router.post('/', (req, res) => {
+  console.log('body:', req.body);
+  addCustomerToDatabase(req.body.name, req.body.tel)
+    .then((customer) => {
+      addOrderToDatabase(customer.id, req.body.message)
+        .then((order) => {
+          addOrderMealsToDatabase(order.id, req.body.order);
+        });
+    })
+    .catch((err) => {
+      console.log("customer creation failed:", err);
+    });
+
+
+  return res.send("data posted");
+});
+
+
+
+
+
+
+
+
+
+
+const mealOrderConnector = (qty, mealId, orderId) => {
+  const queryStr = `
+     INSERT INTO order_meals (order_id, meal_id, meal_quantity)
+     VALUES ($1, $2, $3)
+     RETURNING *;
+     `;
+
+  const queryValues = [qty, mealId, orderId];
+
+  return db.query(queryStr, queryValues)
+    .then((data) => {
+      const joinRow = data.rows[0];
+      console.log("joinRow data is", joinRow);
+      return joinRow;
+    });
+};
+
+
 
 // // query to create an order
 // const insertCustomerIntoDb = (obj) => {
