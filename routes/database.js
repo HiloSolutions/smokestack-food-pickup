@@ -3,7 +3,7 @@ const router  = express.Router();
 // const {insertRowsInDb} = require('db/queries/orders.js')
 
 router.post('/', (req, res) => {
-  res.render('order-status');
+  res.render('orderStatus');
 });
 
 //

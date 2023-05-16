@@ -13,7 +13,9 @@
   <link rel="stylesheet" href="/styles/main.css" />
   <link rel="stylesheet" href="/styles/layout.css" />
   <link rel="stylesheet" href="/styles/index.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&family=Special+Elite&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&family=Special+Elite&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <link rel="icon" type="image/x-icon" href="/images/favicon.png">
   <script src="https://cdn.auth0.com/js/auth0/9.16.1/auth0.min.js"></script>
@@ -41,80 +43,17 @@
       </div>
     </header>
 
-    <!-- includes cart and menu items -->
     <main class="home">
-      <section id="menu-container">
-        <h2 class="food-category">Fried Chicken</h2>
-        <div class="grid-container" id="fried-chicken"></div>
 
-        <h2 class="food-category">Sandwiches</h2>
-        <div class="grid-container" id="sandwiches"></div>
+      <!--menu-->
+      <%- include('components/menu') %>
 
-        <h2 class="food-category">Briskets</h2>
-        <div class="grid-container" id="briskets"></div>
+      <!--shopping cart-->
+      <%- include('components/cart') %>
 
-      </section>
-
-
-      <!--SHOPPING CART STARTS-->
-      <section class="cart-container">
-        <h2>Review order</h2>
-        <!--labels for order items-->
-        <div class="cart-row">
-          <span class="cart-col-1 cart-column">ITEM</span>
-          <span class="cart-col-2 cart-column">PRICE</span>
-          <span class="cart-col-3 cart-column" id="qty-header">QTY</span>
-        </div>
-        <!--list of order items-->
-        <article class="cart-items"></article>
-
-
-        <!--totals-->
-        <div class="cart-total">
-          <strong class="cart-total-title">Total</strong>
-          <span class="cart-total-price">$0.00</span>
-        </div>
-        <!--submit order-->
-        <button id="checkoutButton" class="btn btn-checkout" onclick="checkout()">Checkout</button>
-      </section>
-      <!--SHOPPING CART ENDS-->
-
-
-
-
-      <!--Confirm order form starts-->
+      <!--Confirm order form-->
       <div class="overlay"></div>
-      <form id="confirmation-form" class="order-form" action="/order-status" method="get">
-        <div class="form-header">
-          <h2>Confirm Details for Pickup</h2>
-        </div>
-        <div>
-          <label for="name" class="order-label">Your name</label>
-          <div class="order-input-group">
-            <input type="text" id="name" name="name" class="order-input" placeholder="Jane Smith" required>
-          </div>
-        </div>
-
-        <div>
-          <label for="tel" class="order-label">Your phone number</label>
-          <div class="order-input-group">
-            <input type="tel" id="tel" name="tel" class="order-input" placeholder="+1-555-5555" required>
-          </div>
-        </div>
-
-        <div>
-          <label for="message" class="order-label">Special Instructions:</label>
-          <div class="order-input-group">
-            <textarea id="message" name="message" class="order-input" rows="6" maxlength="1000"
-              placeholder="Allergies, dellivery instructions, etc."></textarea>
-          </div>
-
-          <div class="order-buttons">
-            <button type="button" class="btn-purchase cancel">Cancel</button>
-            <button type="submit" class="btn-purchase confirm">Confirm Order</button>
-          </div>
-      </form>
-      </div>
+      <%- include('components/orderConfirmationForm') %>
 
     </main>
     <!--external scripts-->

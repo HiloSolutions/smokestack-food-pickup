@@ -1,5 +1,4 @@
 const express = require('express');
-const cookieSession = require('cookie-session');
 const dbClient = require('./db/connection');
 const { auth } = require('express-openid-connect');
 //const { Server } = require('socket.io');
@@ -31,13 +30,6 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
-
-app.use(
-  cookieSession({
-    name: 'session',
-    keys: ['test'],
-  })
-);
 
 app.use(auth(config));
 

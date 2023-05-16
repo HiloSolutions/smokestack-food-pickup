@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 //const socket = io();
 
 // ---- REQUIRE IN ORDER ----- //
@@ -13,7 +14,7 @@ const ratingInput = (currentStar) => {
   currentStar.setAttribute("data-clicked", "true");
 
   userOrder.order[productId].rating = rating;
-}
+};
 
 // ---- ORDER STATUS FUNCTIONS ---- //
 const durationMin = 0.5;
@@ -63,7 +64,7 @@ const createRatingElement = function(rating) {
   $(".review-page").append(mealRating);
 };
 
-function submitReview() {
+const submitReview = () => {
   const reviewThanks = $(`
   <h3 class="pickup-alert">Thanks for rating our food! <br>Hope to see you again.</h3>
   <a class="home-button button" style="width: 180px;" href="/">Order Again</a>
@@ -74,7 +75,7 @@ function submitReview() {
   // localStorage.setItem("incomingData", JSON.stringify(incomingData));
   // const outgoingData = JSON.parse(localStorage.getItem("incomingData"));
   // console.log(outgoingData);
-}
+};
 
 // ---- CLICK LISTENERS ---- //
 // $(function() {
@@ -89,23 +90,22 @@ function submitReview() {
 //     $("#order-estimate").slideUp();
 //   })
 
-  // $("#order-complete-button").click(function () {
+// $("#order-complete-button").click(function () {
 
-  // });
+// });
 
-  $("#review").click(function() {
-    const reviewForm = $(`
+$("#review").click(function() {
+  const reviewForm = $(`
       <h3 class="pickup-alert">Rate your experience</h3>
       <article class="review-page"></article>
     `);
 
-    const submitReview = $(`
+  const submitReview = $(`
       <button onclick="submitReview()" class="button home-button" id="submit-review">Submit Review</button>
     `);
 
-    $("#order-review").append(reviewForm);
-    renderFoodRatings(userOrder);
-    $("#order-review").append(submitReview);
-    $("#order-complete").empty();
-  });
+  $("#order-review").append(reviewForm);
+  renderFoodRatings(userOrder);
+  $("#order-review").append(submitReview);
+  $("#order-complete").empty();
 });

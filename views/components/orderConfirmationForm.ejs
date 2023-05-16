@@ -1,0 +1,33 @@
+<form id="confirmation-form" class="order-form" action="/orders" method="get">
+  <div class="form-header">
+    <h2>Confirm Details for Pickup</h2>
+  </div>
+  <div>
+    <label for="name" class="order-label">Your name</label>
+    <% if(!isAuthenticated) { %>
+      <input type="text" id="name" name="name" class="order-input" placeholder="Jane Smith" required>
+    <% } else { %>
+        <input type="text" id="name" name="name" class="order-input" value="<%= user.nickname %>" required> 
+    <% } %>
+  </div>
+
+  <div>
+    <label for="tel" class="order-label">Your phone number</label>
+    <div class="order-input-group">
+      <input type="tel" id="tel" name="tel" class="order-input" placeholder="+1-555-5555" required>
+    </div>
+  </div>
+
+  <div>
+    <label for="message" class="order-label">Special Instructions:</label>
+    <div class="order-input-group">
+      <textarea id="message" name="message" class="order-input" rows="6" maxlength="1000"
+        placeholder="Allergies, dellivery instructions, etc."></textarea>
+    </div>
+  </div>
+
+  <div class="order-buttons">
+    <button type="button" class="btn-purchase cancel">Cancel</button>
+    <button type="submit" class="btn-purchase confirm">Confirm Order</button>
+  </div>
+</form>
