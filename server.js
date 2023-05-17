@@ -9,11 +9,12 @@ const orderController = require('./routes/orders');
 const customerController = require('./routes/customers');
 const adminController = require('./routes/restaurantDashboard');
 const databaseController = require('./routes/database');
-//const smsRoutes = require('./routes/sms');
+const smsRoutes = require('./routes/sms');
 
 require('dotenv').config();
 
 const PORT = process.env.EXPRESS_PORT;
+
 const config = {
   authRequired: false,
   auth0Logout: true,
@@ -22,6 +23,7 @@ const config = {
   clientID: process.env.CLIENTID,
   issuerBaseURL: process.env.ISSUER
 };
+
 
 const app = express();
 app.set('views', 'views');
@@ -40,6 +42,7 @@ app.use('/orders', orderController);
 app.use('/customers', customerController);
 app.use('/admin', adminController);
 app.use('/api/database', databaseController);
+app.use('/sms', smsRoutes);
 
 
 app.use((req, res, next) => {

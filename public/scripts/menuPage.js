@@ -124,7 +124,7 @@ const createCartElement = (id) => {
 
 
 
-//CALCULATE TOTAL: takes in id (string) of menu item and tracks cart total
+//tracks cart total
 const updateCartTotal = () => {
   const order = JSON.parse(localStorage.getItem('order'));
   const total = Object.values(order).reduce((acc, cur) => {
@@ -155,9 +155,7 @@ const updateCartQuantity = (id, numOfItems) => {
 
 
 
-//
-// REMOVE ITEMS: when remove button is clicked, remove item from cart (front-end)
-//
+// remove item from cart
 const removeItemFromOrder = (item) => {
   item.remove(); //remove html row from browser
   const order = JSON.parse(localStorage.getItem('order'));
@@ -202,9 +200,7 @@ $('.btn-checkout').click(() => {
 
 
 
-//
 // CANCEL CHECKOUT
-//
 $('.cancel').click(() => {
   const form = $(`#confirmation-form`)[0];
   $('.overlay').css("display", "none").fadeOut();
@@ -213,9 +209,7 @@ $('.cancel').click(() => {
 
 
 
-//
 // CONFIRM CHECKOUT
-//
 $('.confirm').click(() => {
   if ($('#name').val().length === 0 || $('#tel').val().length === 0) return;
 
@@ -229,16 +223,20 @@ $('.confirm').click(() => {
 
   localStorage.setItem("userOrder", JSON.stringify(userOrder));
 
+  //need code to send order to database
 
   $.post('/order', userOrder, function(res) {
     console.log("db res is:", res);
   });
 
-  // $.get('/sms/placed')
-  // socket.emit('newOrder', 'awesome!');
-  // //-----If the customer returns to the order page, the order button will be visible -----//
-  // const seeOrderBtn = $(`#see-order`)[0];
-  // $(seeOrderBtn).show(100);
+//need to move this to scripts
+$.get('/sms/placed', (req, res) => {
+  socket.emit('newOrder', 'awesome!');
+  const seeOrderBtn = $(`#see-order`)[0];
+  res.json(loginStatus);
+  $(seeOrderBtn).show(100);
+});
+
 
 });
 
