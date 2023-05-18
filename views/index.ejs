@@ -16,13 +16,9 @@
   <link rel="stylesheet" href="/styles/cart.css" />
   <link rel="stylesheet" href="/styles/menu.css" />
   <link rel="stylesheet" href="/styles/orderConfirmationForm.css" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&family=Special+Elite&display=swap"
-    rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&family=Special+Elite&display=swap" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-  <link rel="icon" type="image/x-icon" href="/images/favicon.png">
   <script src="https://cdn.auth0.com/js/auth0/9.16.1/auth0.min.js"></script>
-
   <script src="/vendor/jquery-3.0.0.js"></script>
   <script src="https://kit.fontawesome.com/81d8ede405.js" crossorigin="anonymous"></script>
   <!--<script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+QWObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>-->
@@ -54,14 +50,48 @@
       <!--shopping cart-->
       <%- include('components/cart') %>
 
-      <!--Confirm order form-->
+      <!--Confirm order form <%- include('components/orderConfirmationForm') %>-->
       <div class="overlay"></div>
-      <%- include('components/orderConfirmationForm') %>
+      
+      <form id="confirmation-form" class="order-form" action="/orders/submitOrder" method="POST">
+        <div class="form-header">
+          <h2>Confirm Details for Pickup</h2>
+        </div>
+        <div>
+          <label for="name" class="order-label">Your name</label>
+          <% if(!isAuthenticated) { %>
+            <input type="text" id="name" name="name" class="order-input" placeholder="Jane Smith" required>
+          <% } else { %>
+              <input type="text" id="name" name="name" class="order-input" value="<%= user.nickname %>" required> 
+          <% } %>
+        </div>
+      
+        <div>
+          <label for="tel" class="order-label">Your phone number</label>
+          <div class="order-input-group">
+            <input type="tel" id="tel" name="tel" class="order-input" placeholder="+1-555-5555" required>
+          </div>
+        </div>
+      
+        <div>
+          <label for="message" class="order-label">Special Instructions:</label>
+          <div class="order-input-group">
+            <textarea id="message" name="message" class="order-input" rows="6" maxlength="1000"
+              placeholder="Allergies, dellivery instructions, etc."></textarea>
+          </div>
+        </div>
+      
+        <div class="order-buttons">
+          <button type="button" class="btn-purchase cancel">Cancel</button>
+          <button type="submit" id="order-confirmation-btn" class="btn-purchase confirm">Confirm Order</button>
+        </div>
+      </form>
 
     </main>
     <!--external scripts-->
     <script src="./scripts/restaurantDashboard.js"></script>
     <script type="module" src="./scripts/menuPage.js"></script>
+    <script type="module" src="./scripts/orderConfirmation.js"></script>
     <script type="module" src="./scripts/customers.js"></script>
 </body>
 

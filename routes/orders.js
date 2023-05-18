@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
@@ -6,22 +8,32 @@ const { requiresAuth } = require('express-openid-connect');
 
 // load order confirmation page
 
-router.get('/', (req, res) => {
-  const isAuthenticated = req.oidc.isAuthenticated();
-  res.render('orderStatus', {
+router.get('/', (request, response) => {
+  console.log('2. orders/');
+  const isAuthenticated = request.oidc.isAuthenticated();
+  response.render('orderStatus', {
     isAuthenticated,
-    user: req.oidc.user
+    user: request.oidc.user
   });
-
-  console.log('1. orders/');
-  //dbInsertIntoOrders();
 });
 
 
 
-router.post('/add', (req, res) => {
-  console.log('2. orders/add');
+// Route for handling the checkout form submission
+router.post('/submitOrder', (req) => {
+  const orderID = Number(Math.ceil(Math.random() * 2000000));
+  const customerID = 1;
+  const isFulfilled = false;
+  const specialInstructions = req.body.message;
+
+  const queryStr = `
+  INSERT INTO orders (id, customer_id, is_fulfilled, special_instructions) 
+  VALUES ($1, $2, $3, $4);
+  `;
+  const queryValues = [orderID, customerID, isFulfilled, specialInstructions];
+  return db.query(queryStr, queryValues);
 });
+
 
 
 
@@ -74,28 +86,22 @@ const addOrderMealsToDatabase = (orderId, orderObj) => {
 };
 
 
-router.post('/', (req, res) => {
-  console.log('body:', req.body);
-  addCustomerToDatabase(req.body.name, req.body.tel)
-    .then((customer) => {
-      addOrderToDatabase(customer.id, req.body.message)
-        .then((order) => {
-          addOrderMealsToDatabase(order.id, req.body.order);
-        });
-    })
-    .catch((err) => {
-      console.log("customer creation failed:", err);
-    });
+// router.post('/', (req, res) => {
+//   console.log('body:', req.body);
+//   addCustomerToDatabase(req.body.name, req.body.tel)
+//     .then((customer) => {
+//       addOrderToDatabase(customer.id, req.body.message)
+//         .then((order) => {
+//           addOrderMealsToDatabase(order.id, req.body.order);
+//         });
+//     })
+//     .catch((err) => {
+//       console.log("customer creation failed:", err);
+//     });
 
 
-  return res.send("data posted");
-});
-
-
-
-
-
-
+//   return res.send("data posted");
+// });
 
 
 
@@ -117,35 +123,6 @@ const mealOrderConnector = (qty, mealId, orderId) => {
     });
 };
 
-
-
-// // query to create an order
-// const insertCustomerIntoDb = (obj) => {
-//   const sql = `INSERT INTO customers (
-//     name, phone_number)
-//       VALUES($1, $2)
-
-//   `;
-//   return db.query(sql,[obj.1, obj.2]);
-// };
-
-// // const insertRowsInOrdersDb = (obj) => {
-// //   return db
-//   .query(`
-//   INSERT INTO orders (
-//     id, customer_id, special_instructions
-//   )
-//   VALUES (
-//     $1, (SELECT id FROM customers WHERE id= ????), $3
-//   )
-//   `, [obj.1, obj.2, obj.3])
-//   .then((result) => {
-//     return result.rows[0];
-//   })
-//   .catch((err) => {
-//     console.log(err.message);
-//   })
-// };
 
 // const insertRowsInMealsDb = (obj) => {
 //   return db

@@ -1,14 +1,13 @@
 const express = require('express');
 const dbClient = require('./db/connection');
 const { auth } = require('express-openid-connect');
-//const { Server } = require('socket.io');
+const { Server } = require('socket.io');
 
 //import router
 const indexRouter = require('./routes/index.js');
 const orderController = require('./routes/orders');
 const customerController = require('./routes/customers');
 const adminController = require('./routes/restaurantDashboard');
-const databaseController = require('./routes/database');
 const smsRoutes = require('./routes/sms');
 
 require('dotenv').config();
@@ -41,7 +40,6 @@ app.use('/', indexRouter);
 app.use('/orders', orderController);
 app.use('/customers', customerController);
 app.use('/admin', adminController);
-app.use('/api/database', databaseController);
 app.use('/sms', smsRoutes);
 
 
@@ -60,20 +58,20 @@ app.listen(PORT, () => {
 
 
 
-// const io = new Server(server);
+const io = new Server();
 
-// io.on('connection', (socket) => {
-//   socket.on('time', (data) => {
-//     io.emit('sentTime', data);
-//   });
+io.on('connection', (socket) => {
+  socket.on('time', (data) => {
+    io.emit('sentTime', data);
+  });
 
-//   socket.on('complete', (data) => {
-//     io.emit('sentComplete', data);
-//   });
+  socket.on('complete', (data) => {
+    io.emit('sentComplete', data);
+  });
 
-//   socket.on('newOrder', (data) => {
-//     io.emit('sentNewOrder', data);
-//   });
-// });
+  socket.on('newOrder', (data) => {
+    io.emit('sentNewOrder', data);
+  });
+});
 
-// io.listen(3000);
+io.listen(3000);

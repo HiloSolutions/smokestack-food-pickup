@@ -1,13 +1,10 @@
-/* eslint-disable no-undef */
 //const socket = io();
 
 // ---- REQUIRE IN ORDER ----- //
-
 const userOrder = JSON.parse(localStorage.getItem("userOrder"));
 
 
 // ---- STAR RATINGS ---- //
-
 const ratingInput = (currentStar) => {
   const rating = currentStar.getAttribute("data-rating");
   const productId = currentStar.parentElement.getAttribute("data-productid");

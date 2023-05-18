@@ -17,14 +17,6 @@ const loadMeals = () => {
 
 
 
-//send text messages
-const sendText = () => {
-  $.get('/sms/placed', (req, res) => {
-    socket.emit('newOrder', 'awesome!');
-  });
-};
-
-
 //update database when an order is placed
 
 
@@ -221,23 +213,6 @@ $('.cancel').click(() => {
   $(form).hide(100);
 });
 
-
-
-// CONFIRM CHECKOUT
-$('#order-confirmation-btn').click(() => {
-  if ($('#name').val().length === 0 || $('#tel').val().length === 0) {
-    return;
-  }
-
-  const order = {
-    order: JSON.parse(localStorage.getItem('order')),
-    name: $('#name').val(),
-    tel: $('#tel').val(),
-    message: $('#message').val()
-  };
-
-
-});
 
 
 //LOAD MEALS
