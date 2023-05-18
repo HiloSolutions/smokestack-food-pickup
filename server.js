@@ -60,7 +60,6 @@ app.listen(PORT, () => {
 
 
 
-//sockets router
 // const io = new Server(server);
 
 // io.on('connection', (socket) => {
