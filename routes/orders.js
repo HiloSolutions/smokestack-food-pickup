@@ -1,39 +1,29 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
+const { dbInsertIntoOrders } = require('../db/queries/orders');
 const { requiresAuth } = require('express-openid-connect');
 
 // load order confirmation page
+
 router.get('/', (req, res) => {
   const isAuthenticated = req.oidc.isAuthenticated();
-  
   res.render('orderStatus', {
     isAuthenticated,
     user: req.oidc.user
   });
 
+  console.log('1. orders/');
+  //dbInsertIntoOrders();
 });
 
 
 
-//function to add order information into the database
-const addOrderToDatabase = (customerId, specialinstructions) => {
-  console.log(customerId, specialinstructions);
-  const queryStr = `
-     INSERT INTO orders (customer_id, is_fulfilled, special_instructions)
-     VALUES ($1, FALSE, $2)
-     RETURNING *;
-     `;
+router.post('/add', (req, res) => {
+  console.log('2. orders/add');
+});
 
-  const queryValues = [customerId, specialinstructions];
 
-  return db.query(queryStr, queryValues)
-    .then((orderData) => {
-      const order = orderData.rows[0];
-      console.log("order data is", order);
-      return order;
-    });
-};
 
 
 
@@ -49,10 +39,13 @@ const addCustomerToDatabase = (nameOfCustomer, num) => {
   return db.query(queryStr, queryValues)
     .then((customerData) => {
       const customer = customerData.rows[0];
-      console.log("customer data is", customer);
+      console.log("3. addCustomerToDatabase", customer);
       return customer;
     });
 };
+
+
+//add order to database
 
 
 
@@ -73,7 +66,7 @@ const addOrderMealsToDatabase = (orderId, orderObj) => {
     db.query(mealQueryStr, mealQueryValues)
       .then((mealData) => {
         const meal = mealData.rows[0];
-
+        console.log("5. addOrderMealsToDatabase");
         mealOrderConnector(mealQuantity, meal.id, orderId);
       });
   });

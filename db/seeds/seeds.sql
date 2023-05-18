@@ -4,17 +4,17 @@ VALUES
 (2, 'windowslive|9dd91a882c41e6b6', 'Lauren Admin', '7801112222', true);
 
 
-INSERT INTO orders (id, customer_id, est_completion_time, is_fulfilled, special_instructions)
-VALUES (1, 1, 20, FALSE, 'This is order 1'),
-(2, 2, 30, TRUE, 'This is order 2'),
-(3, 1, 30, FALSE, 'This is order 3'),
-(4, 1, 20, FALSE, 'This is order 4'),
-(5, 2, 30, TRUE, 'This is order 5'),
-(6, 1, 30, FALSE, 'This is order 6'),
-(7, 1, 20, FALSE, 'This is order 7'),
-(8, 2, 30, TRUE, 'This is order 8'),
-(9, 1, 30, FALSE, 'This is order 9'),
-(10, 1, 20, FALSE, 'This is order 10');
+INSERT INTO orders (customer_id, est_completion_time, is_fulfilled, special_instructions)
+VALUES (1, 20, FALSE, 'This is order 1'),
+(2, 30, TRUE, 'This is order 2'),
+(1, 30, FALSE, 'This is order 3'),
+(1, 20, FALSE, 'This is order 4'),
+(2, 30, TRUE, 'This is order 5'),
+(1, 30, FALSE, 'This is order 6'),
+(1, 20, FALSE, 'This is order 7'),
+(2, 30, TRUE, 'This is order 8'),
+(1, 30, FALSE, 'This is order 9'),
+(1, 20, FALSE, 'This is order 10');
 
 INSERT INTO meals (id, img, meal_name, price, rate, menu_category)
 VALUES

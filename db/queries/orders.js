@@ -1,8 +1,9 @@
 const db = require("../connection");
 
 
-
-
+const dbInsertIntoOrders = (order) => {
+  console.log('updateDatabase:', order);
+};
 
 
 
@@ -37,4 +38,4 @@ const getOrders = () => {
     });
 };
 
-module.exports = { getOrders };
+module.exports = { getOrders, dbInsertIntoOrders };

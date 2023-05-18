@@ -1,10 +1,12 @@
 /********** GLOBAL VARIABLES **********/
-
+//get order from database instead
 const userOrder = JSON.parse(localStorage.getItem("userOrder"));
-const d = new Date();
-const orderTime = d.toLocaleTimeString();
+const date = new Date();
+const orderTime = date.toLocaleTimeString();
 //const socket = io();
 let uniqueId = 0;
+
+
 
 /********** APPEND ORDER REQUESTS **********/
 const existingOrders = JSON.parse(localStorage.getItem("orderList")) || [];

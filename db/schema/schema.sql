@@ -15,7 +15,7 @@ CREATE TABLE users (
 CREATE TABLE orders (
   id SERIAL PRIMARY KEY NOT NULL,
   customer_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  est_completion_time SMALLINT,
+  est_completion_time SMALLINT DEFAULT 30,
   order_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   is_fulfilled BOOLEAN NOT NULL DEFAULT FALSE,
   special_instructions TEXT,

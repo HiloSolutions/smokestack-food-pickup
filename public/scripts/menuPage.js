@@ -17,6 +17,20 @@ const loadMeals = () => {
 
 
 
+//send text messages
+const sendText = () => {
+  $.get('/sms/placed', (req, res) => {
+    socket.emit('newOrder', 'awesome!');
+  });
+};
+
+
+//update database when an order is placed
+
+
+
+
+//check if user is logged in
 const checkAuthStatus = () => {
   fetch('http://localhost:8080/customers/authenticationCheck')
     .then((res) => {
@@ -210,32 +224,17 @@ $('.cancel').click(() => {
 
 
 // CONFIRM CHECKOUT
-$('.confirm').click(() => {
-  if ($('#name').val().length === 0 || $('#tel').val().length === 0) return;
+$('#order-confirmation-btn').click(() => {
+  if ($('#name').val().length === 0 || $('#tel').val().length === 0) {
+    return;
+  }
 
-  //----- proceed to checkout if number of order items is > 0 -----//
-  const userOrder = {
+  const order = {
     order: JSON.parse(localStorage.getItem('order')),
     name: $('#name').val(),
     tel: $('#tel').val(),
     message: $('#message').val()
-  }
-
-  localStorage.setItem("userOrder", JSON.stringify(userOrder));
-
-  //need code to send order to database
-
-  $.post('/order', userOrder, function(res) {
-    console.log("db res is:", res);
-  });
-
-//need to move this to scripts
-$.get('/sms/placed', (req, res) => {
-  socket.emit('newOrder', 'awesome!');
-  const seeOrderBtn = $(`#see-order`)[0];
-  res.json(loginStatus);
-  $(seeOrderBtn).show(100);
-});
+  };
 
 
 });

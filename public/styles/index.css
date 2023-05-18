@@ -15,41 +15,31 @@ nav {
 }
 
 
-.logo-image {
-  margin-top: 3px;
-
-  width: 70px;
-}
-#see-order {
-  display: none;
+main {
+  position: relative;
 }
 
-#bouncing-nav-arrow {
-  position: absolute;
-  animation: bounce 1.5s linear infinite;
-}
-
-@keyframes bounce {
-  0%   { transform: translateX(60px); }
-  50%  { transform: translateX(80px); }
-  100% { transform: translateX(60px); }
-}
 
 img {
   border-radius: 5px;
 }
 
+
+.logo-image {
+  margin-top: 3px;
+  width: 70px;
+}
+
+
 .page-header {
   top: -56px;
   width: 100%;
   height: 50vh;
-
   background: url('/images/ezgif.com-video-to-gif.gif');
   background-repeat: no-repeat;
   background-blend-mode: multiply;
   background-position: center center;
   background-size: cover;
-
   font-size: 4rem;
   font-family: 'Bebas Neue', cursive;
   letter-spacing: 1px;
@@ -59,6 +49,7 @@ img {
   justify-content: center;
 }
 
+
 .page-header h2 {
   position: relative;
   color: #ffffff;
@@ -67,9 +58,11 @@ img {
   text-align: center;
 }
 
+
 .animate__animated.animate__fadeInUp {
   --animate-duration: 2s;
 }
+
 
 .page-header::before {
   content: "";
@@ -87,17 +80,22 @@ img {
   margin-top: 50px;
 }
 
+
 .section-heading span {
   color: #bc4b30;
 }
+
+
 .section-heading hr{
   color: #bc4b30;
 }
+
 
 .home {
   display: flex;
   height: auto;
 }
+
 
 .btn-purchase {
   box-sizing: border-box;
@@ -136,21 +134,11 @@ img {
   border-radius: 10px;
 }
 
+
 .btn-danger:hover {
   background-color: #CC4C4C;
 }
 
-#qty-header {
-  align-self: flex-start;
-}
-
-
-
-/* //order confirmation form styles */
-
-main {
-  position: relative;
-}
 
 .form-header {
   width: 100%;
@@ -168,12 +156,12 @@ main {
 }
 
 
-
 .cancel {
   margin-right: .5em;
   background-color: #939393;
   font-weight: 400;
 }
+
 
 .confirm {
   margin-left: .5em;
@@ -181,9 +169,11 @@ main {
   font-weight: 400;
 }
 
+
 .confirm:hover {
   background-color: #903822;
 }
+
 
 .underline {
   padding:0;
@@ -192,6 +182,29 @@ main {
   background-color: #bc4b30;
   border: none;
   border-radius: 10px;
+}
+
+
+#see-order {
+  display: none;
+}
+
+
+#bouncing-nav-arrow {
+  position: absolute;
+  animation: bounce 1.5s linear infinite;
+}
+
+
+#qty-header {
+  align-self: flex-start;
+}
+
+
+@keyframes bounce {
+  0%   { transform: translateX(60px); }
+  50%  { transform: translateX(80px); }
+  100% { transform: translateX(60px); }
 }
 
 
