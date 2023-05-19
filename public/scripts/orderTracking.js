@@ -1,4 +1,5 @@
-//const socket = io();
+/* eslint-disable no-undef */
+const socket = io();
 
 // ---- REQUIRE IN ORDER ----- //
 const userOrder = JSON.parse(localStorage.getItem("userOrder"));
@@ -15,7 +16,7 @@ const ratingInput = (currentStar) => {
 
 // ---- ORDER STATUS FUNCTIONS ---- //
 const durationMin = 0.5;
-const createOrderEstimate = function(durationMin) {
+const createOrderEstimate = (durationMin) => {
   const orderMessage = $(`
   <h3 class="pickup-alert">Your order will be ready in ${durationMin} minutes!</h3>
   <div
@@ -24,6 +25,7 @@ const createOrderEstimate = function(durationMin) {
   style="--width: 0"
 ></div>
   `);
+  
   // ---- PROGRESS BAR ----- //
   $("#order-estimate").prepend(orderMessage);
   const progressBar = document.getElementsByClassName("progress-bar")[0];
@@ -35,7 +37,7 @@ const createOrderEstimate = function(durationMin) {
   }, durationMin * 60);
 };
 
-const renderFoodRatings = function(data) {
+const renderFoodRatings = () => {
   let ratings = Object.values(userOrder.order);
   for (const rating of ratings) {
     createRatingElement(rating);
@@ -68,41 +70,39 @@ const submitReview = () => {
   `);
   $("#order-review").empty();
   $("#order-review").append(reviewThanks);
-
-  // localStorage.setItem("incomingData", JSON.stringify(incomingData));
-  // const outgoingData = JSON.parse(localStorage.getItem("incomingData"));
-  // console.log(outgoingData);
 };
 
 // ---- CLICK LISTENERS ---- //
-// $(function() {
-//   socket.on('sentTime', data => {
-//     $("#initial-order").slideUp();
-//     $("#order-estimate").slideDown();
-//     createOrderEstimate(data);
-//   })
+$(() => {
+  socket.on('sentTime', (data) => {
+    $("#initial-order").slideUp();
+    $("#order-estimate").slideDown();
+    createOrderEstimate(data);
+  });
 
-//   socket.on('sentComplete', data => {
-//     $("#order-complete").slideDown();
-//     $("#order-estimate").slideUp();
-//   })
+  socket.on('sentComplete', () => {
+    $("#order-complete").slideDown();
+    $("#order-estimate").slideUp();
+  });
 
-// $("#order-complete-button").click(function () {
+  $("#order-complete-button").click(() => {
 
-// });
+  });
 
-$("#review").click(function() {
-  const reviewForm = $(`
+
+  $("#review").click(() => {
+    const reviewForm = $(`
       <h3 class="pickup-alert">Rate your experience</h3>
       <article class="review-page"></article>
     `);
 
-  const submitReview = $(`
+    const submitReview = $(`
       <button onclick="submitReview()" class="button home-button" id="submit-review">Submit Review</button>
     `);
 
-  $("#order-review").append(reviewForm);
-  renderFoodRatings(userOrder);
-  $("#order-review").append(submitReview);
-  $("#order-complete").empty();
+    $("#order-review").append(reviewForm);
+    renderFoodRatings(userOrder);
+    $("#order-review").append(submitReview);
+    $("#order-complete").empty();
+  });
 });

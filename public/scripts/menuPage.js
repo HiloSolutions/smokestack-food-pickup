@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 //get menu items from database
 const loadMeals = () => {
   fetch('http://localhost:8080/menu')
@@ -12,27 +13,6 @@ const loadMeals = () => {
 
     .catch((err) => {
       console.log('Error (loadMeals)', err);
-    });
-};
-
-
-
-//update database when an order is placed
-
-
-
-
-//check if user is logged in
-const checkAuthStatus = () => {
-  fetch('http://localhost:8080/customers/authenticationCheck')
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      return data;
-    })
-    .catch((err) => {
-      console.log('Error (checkAuthStatus)', err);
     });
 };
 
@@ -185,14 +165,6 @@ $('.btn-checkout').click(() => {
     return acc + (cur.qty);
   }, 0);
 
-  //check that user is logged in
-
-
-  // const loggedIn = checkAuthStatus();
-  // if (!loggedIn) {
-  //   return alert("please log in");
-  // }
-  //check that qty is > 0
   if (numOfItems === 0) {
     return alert("please select an item");
   }

@@ -55,6 +55,7 @@ Clone your copy of the repo to your dev machine
 3. **Install dependencies:** ```npm i```
 4. **Reset database:** ```npm run db:reset```
 5. **Run the server:** ```npm run```
-6. Visit ```http://localhost:8080/```
+6. Visit ```http://localhost:8080/``` To see the menu
+7. Visit ```http://localhost:8080/admin``` To see the restaurant dashboard
 
 Note that full setup will require you to set up psql database, auth0 account and twilio account. The variables you need can be added to your .env file (see the example for how your .env file should be set up)
